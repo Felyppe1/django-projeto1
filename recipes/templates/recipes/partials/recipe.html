@@ -1,9 +1,11 @@
 <div class="recipe recipe-list-item">
-    <div class="recipe-cover">
-        <a href='{% url "recipes:recipe" recipe.id %}'>
-            <img src='{{ recipe.cover.url }}' alt="temporário">
-        </a>
-    </div>
+    {% if recipe.cover %}
+        <div class="recipe-cover">
+            <a href='{% url "recipes:recipe" recipe.id %}'>
+                <img src='{{ recipe.cover.url }}' alt="temporário"> {% comment %}Se n achar o url da imagem, da erro!{% endcomment %}
+            </a>
+        </div>
+    {% endif %}
     <div class="recipe-title-container">
         <h2>
             <a href='{% url "recipes:recipe" recipe.id %}'>
@@ -14,14 +16,18 @@
     <div class="recipe-author">
         <span class="recipe-author-item">
             <i class="fa-solid fa-user"></i>
-            {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+            {% if recipe.author.first_name  %}
+                {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+            {% else %}
+                {{ recipe.author.username }}
+            {% endif %}
         </span>
         <span class="recipe-author-item">
             <i class="fa-solid fa-calendar-days"></i>
             {{ recipe.created_at|date:"d/m/Y" }} às {{ recipe.created_at|date:"H:i" }}
         </span>
         <span class="recipe-author-item">
-            <a href="">
+            <a href="{% url 'recipes:category' recipe.category.id %}">
                 <i class="fa-solid fa-layer-group"></i>
                 <span>{{ recipe.category.name }} </span>
             </a>
