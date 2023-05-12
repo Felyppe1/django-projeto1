@@ -3,7 +3,9 @@ from utils.recipes.factory import make_recipe
 from recipes.models import Recipe
 
 def home(request):
-    recipes = Recipe.objects.all().order_by('-id')
+    recipes = Recipe.objects.filter(
+        is_published=True
+    ).order_by('-id')
     return render(request, 'recipes/pages/home.html', {
         'recipes': recipes #[make_recipe() for _ in range(10)]
     }
@@ -11,9 +13,10 @@ def home(request):
 
 def category(request, category_id):
     recipes = Recipe.objects.filter(
-        category__id=category_id  #__ serve para acessar campos da foreign key
+        category__id=category_id, #__ serve para acessar campos da foreign key
+        is_published=True  
     ).order_by('-id')
-    return render(request, 'recipes/pages/home.html', {
+    return render(request, 'recipes/pages/category.html', {
         'recipes': recipes #[make_recipe() for _ in range(10)]
     }
 )
